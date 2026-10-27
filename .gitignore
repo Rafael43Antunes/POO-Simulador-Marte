@@ -1,0 +1,9 @@
+# Ignorar configurações locais do CLion
+.idea/
+
+# Ignorar as pastas de compilação do CMake
+cmake-build-*/
+
+# Ignorar os binários gerados
+*.exe
+*.out
