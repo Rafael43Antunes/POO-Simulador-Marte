@@ -3,4 +3,6 @@ project(Projeto)
 
 set(CMAKE_CXX_STANDARD 20)
 
-add_executable(Projeto main.cpp)
+add_executable(Projeto main.cpp
+        Ecra.cpp
+        Ecra.h)
