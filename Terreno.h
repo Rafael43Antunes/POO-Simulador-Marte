@@ -6,7 +6,7 @@ class Terreno {
 public:
     virtual ~Terreno() = default;
 
-    virtual char getCaracterVirtual() const = 0;
+    virtual char getCaracterVisual() const = 0;
     virtual bool aceitaMaquinas() const = 0;
 
     virtual bool isEsgotado() const;
@@ -15,7 +15,7 @@ public:
 
 class Solo : public Terreno {
 public:
-    char getCaracterVirtual() const override;
+    char getCaracterVisual() const override;
     bool aceitaMaquinas() const override;
 };
 

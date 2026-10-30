@@ -4,7 +4,7 @@ bool Terreno::isEsgotado() const {
     return false;
 }
 
-char Solo::getCaracterVirtual() const {
+char Solo::getCaracterVisual() const {
     return ' ';
 }
 
@@ -12,7 +12,7 @@ bool Solo::aceitaMaquinas() const {
     return true;
 }
 
-char Cratera::getCaracterVirtual() const {
+char Cratera::getCaracterVisual() const {
     return '#';
 }
 
@@ -20,7 +20,7 @@ bool Cratera::aceitaMaquinas() const {
     return false;
 }
 
-Deposito::Deposito(char tipo, int qtd) : tipo(tipo), quantidade(qtd) {}
+Deposito::Deposito(char tipo, int qtd) : tipo_material(tipo), quantidade(qtd) {}
 
 char Deposito::getCaracterVisual() const {
     return tipo_material;

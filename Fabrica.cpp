@@ -87,17 +87,19 @@ void Fabrica::desenha(Ecra& ecra) const {
     ecra.posicionaCursor(offset_linha - 1, offset_coluna + 1);
     for (int j = 0; j < colunas; ++j) {
         ecra.escreveCaracter('A' + j);
+        ecra.escreveCaracter(' ');
     }
 
-    ecra.desenhaMoldura(offset_linha, offset_coluna, linhas + 2, colunas + 2);
+    ecra.desenhaMoldura(offset_linha, offset_coluna, linhas + 2, (colunas * 2) + 2);
 
     for (int l = 0; l < linhas; ++l) {
         ecra.posicionaCursor(offset_linha + 1 + l, offset_coluna - 1);
         ecra.escreveCaracter('A' + l);
-        
+
         ecra.posicionaCursor(offset_linha + 1 + l, offset_coluna + 1);
         for (int c = 0; c < colunas; ++c) {
             ecra.escreveCaracter(mapa[(l * colunas) + c]->getCaracterVisual());
+            ecra.escreveCaracter(' ');
         }
     }
 }

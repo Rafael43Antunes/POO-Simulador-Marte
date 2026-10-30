@@ -5,6 +5,7 @@
 #ifndef ECRA_H
 #define ECRA_H
 
+#include <string>
 
 class Ecra {
 private:

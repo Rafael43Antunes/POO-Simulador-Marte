@@ -81,7 +81,20 @@ void Ecra::desenhaMoldura(int l, int c, int alt, int larg) {
 }
 
 void Ecra::mostra() const {
-    for (int i = 0; i < max_linhas; ++i) {
+    int ultima_linha_valida = 0;
+    bool encontrou_ultima = false;
+
+    for (int i = max_linhas - 1; i >= 0 && !encontrou_ultima; --i) {
+        for (int j = 0; j < max_colunas; ++j) {
+            if (buffer[i][j] != ' ') {
+                ultima_linha_valida = i;
+                encontrou_ultima = true;
+                break;
+            }
+        }
+    }
+
+    for (int i = 0; i <= ultima_linha_valida; ++i) {
         for (int j = 0; j < max_colunas; ++j) {
             std::cout << buffer[i][j];
         }
