@@ -1,7 +1,3 @@
-//
-// Created by rafao on 27/10/2026.
-//
-
 #ifndef ECRA_H
 #define ECRA_H
 
@@ -17,17 +13,21 @@ private:
 
 public:
     Ecra(int linhas, int colunas);
-
     ~Ecra();
+
+    Ecra(const Ecra&) = delete;
+    Ecra& operator=(const Ecra&) = delete;
 
     void limpa();
     void posicionaCursor(int linha, int coluna);
     void escreveCaracter(char c);
     void escreveString(const std::string& str);
-    void desenhaMoldura(int l, int c, int alt, int larg);
+    
+    void escreveCaracter(int linha, int coluna, char c);
+    void escreveString(int linha, int coluna, const std::string& str);
 
+    void desenhaMoldura(int l, int c, int alt, int larg);
     void mostra() const;
 };
-
 
 #endif //ECRA_H

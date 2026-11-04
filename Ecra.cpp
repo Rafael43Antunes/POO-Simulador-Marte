@@ -1,9 +1,13 @@
 #include <iostream>
 #include "Ecra.h"
 
-Ecra::Ecra(int linhas, int colunas) : max_linhas(linhas), max_colunas(colunas), cursor_linha(0), cursor_coluna(0) {
-    buffer = new char*[max_linhas];
+Ecra::Ecra(int linhas, int colunas) {
+    max_linhas = (linhas < 1) ? 1 : linhas;
+    max_colunas = (colunas < 1) ? 1 : colunas;
+    cursor_linha = 0;
+    cursor_coluna = 0;
 
+    buffer = new char*[max_linhas];
     for (int i = 0; i < max_linhas; ++i) {
         buffer[i] = new char[max_colunas];
     }
@@ -15,7 +19,6 @@ Ecra::~Ecra() {
     for (int i = 0; i < max_linhas; ++i) {
         delete[] buffer[i];
     }
-
     delete[] buffer;
 }
 
@@ -25,29 +28,21 @@ void Ecra::limpa() {
             buffer[i][j] = ' ';
         }
     }
-
     cursor_linha = 0;
     cursor_coluna = 0;
 }
 
 void Ecra::posicionaCursor(int linha, int coluna) {
-    if (linha >= 0 && linha < max_linhas)
-        cursor_linha = linha;
-    if (coluna >= 0 && coluna < max_colunas)
-        cursor_coluna = coluna;
+    cursor_linha = linha;
+    cursor_coluna = coluna;
 }
 
 void Ecra::escreveCaracter(char c) {
-    if (cursor_linha >= 0 && cursor_linha < max_linhas && cursor_coluna >= 0 && cursor_coluna < max_colunas) {
+    if (cursor_linha >= 0 && cursor_linha < max_linhas &&
+        cursor_coluna >= 0 && cursor_coluna < max_colunas) {
         buffer[cursor_linha][cursor_coluna] = c;
-
-        cursor_coluna++;
-
-        if (cursor_coluna >= max_colunas) {
-            cursor_coluna = 0;
-            cursor_linha++;
-        }
     }
+    cursor_coluna++;
 }
 
 void Ecra::escreveString(const std::string& str) {
@@ -56,8 +51,17 @@ void Ecra::escreveString(const std::string& str) {
     }
 }
 
+void Ecra::escreveCaracter(int linha, int coluna, char c) {
+    posicionaCursor(linha, coluna);
+    escreveCaracter(c);
+}
+
+void Ecra::escreveString(int linha, int coluna, const std::string& str) {
+    posicionaCursor(linha, coluna);
+    escreveString(str);
+}
+
 void Ecra::desenhaMoldura(int l, int c, int alt, int larg) {
-    // Se a moldura for inválida, aborta o desenho
     if (alt < 2 || larg < 2) return;
 
     posicionaCursor(l, c);
@@ -67,10 +71,8 @@ void Ecra::desenhaMoldura(int l, int c, int alt, int larg) {
     escreveCaracter('+');
 
     for (int i = 1; i < alt - 1; ++i) {
-        posicionaCursor(l + i, c);
-        escreveCaracter('|');
-        posicionaCursor(l + i, c + larg - 1);
-        escreveCaracter('|');
+        escreveCaracter(l + i, c, '|');
+        escreveCaracter(l + i, c + larg - 1, '|');
     }
 
     posicionaCursor(l + alt - 1, c);
@@ -101,4 +103,3 @@ void Ecra::mostra() const {
         std::cout << '\n';
     }
 }
-
