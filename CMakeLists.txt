@@ -17,6 +17,12 @@ add_executable(Projeto main.cpp
         comandos/ComandoFim.cpp
         comandos/ComandoFim.h
         comandos/ComandoLposicao.cpp
-        comandos/ComandoLposicao.h)
+        comandos/ComandoLposicao.h
+        comandos/Interpretador.cpp
+        comandos/Interpretador.h
+        comandos/ComandoFabrica.cpp
+        comandos/ComandoFabrica.h
+        comandos/ComandoCarrega.cpp
+        comandos/ComandoCarrega.h)
 
 target_include_directories(Projeto PRIVATE ${CMAKE_SOURCE_DIR})

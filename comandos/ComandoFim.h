@@ -5,7 +5,7 @@
 
 class ComandoFim : public Comando{
 public:
-    void executar(Simulador& sim, std::istringstream& args ) override;
+    void executa(Simulador& sim, std::istringstream& args ) override;
 
     std::string getSintaxe() const override;
     std::string getAjuda() const override;
