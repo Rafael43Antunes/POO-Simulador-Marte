@@ -4,9 +4,11 @@ project(Projeto)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Projeto main.cpp
-        Ecra.cpp
-        Ecra.h
-        Terreno.cpp
-        Terreno.h
-        Fabrica.cpp
-        Fabrica.h)
+        Ecra/Ecra.cpp
+        Ecra/Ecra.h
+        terreno/Terreno.cpp
+        terreno/Terreno.h
+        simulador/Fabrica.cpp
+        simulador/Fabrica.h)
+
+target_include_directories(Projeto PRIVATE ${CMAKE_SOURCE_DIR})

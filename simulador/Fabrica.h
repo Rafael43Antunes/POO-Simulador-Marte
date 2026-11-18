@@ -2,8 +2,8 @@
 #define PROJETO_FABRICA_H
 
 #include <string>
-#include "Terreno.h"
-#include "Ecra.h"
+#include "../terreno/Terreno.h"
+#include "../ecra/Ecra.h"
 
 class Fabrica {
 private:

@@ -1,5 +1,5 @@
 #include "Fabrica.h"
-#include "Settings.h"
+#include "../Settings.h"
 #include <cstdlib>
 
 Fabrica::Fabrica(int num_linhas, int num_colunas) {
@@ -76,8 +76,7 @@ void Fabrica::espalhaDepositos(int num_depositos, char tipo) {
         int indice = (r_linha * colunas) + r_coluna;
 
         if (mapa[indice]->isSolo()) {
-            int quantidade = Settings::deposito_quantidade_min +
-                (rand() % (Settings::deposito_quantidade_max - Settings::deposito_quantidade_min + 1));
+            int quantidade = Settings::deposito_quantidade_min + (rand() % (Settings::deposito_quantidade_max - Settings::deposito_quantidade_min + 1));
 
             delete mapa[indice];
             mapa[indice] = new Deposito(tipo, quantidade);

@@ -3,9 +3,9 @@
 #include <sstream>
 #include <cstdlib>
 #include <ctime>
-#include "Ecra.h"
+#include "ecra/Ecra.h"
 #include "Settings.h"
-#include "Fabrica.h"
+#include "simulador/Fabrica.h"
 
 int main() {
     srand((unsigned int)time(NULL));
@@ -36,7 +36,7 @@ int main() {
 
         std::cout << "\nComandos disponiveis nesta fase: 'lposicao <lc>' ou 'fim'\n> ";
         if (!std::getline(std::cin, linha_input)) {
-            break; // Proteção caso o utilizador faça Ctrl+D / EOF
+            break;
         }
 
         std::istringstream iss(linha_input);
