@@ -1,28 +1,32 @@
 #include <iostream>
-#include <string>
 #include <sstream>
+#include <string>
 #include <cstdlib>
 #include <ctime>
 #include "ecra/Ecra.h"
 #include "Settings.h"
-#include "simulador/Fabrica.h"
+#include "simulador/Simulador.h"
+#include "comandos/Comando.h"
+#include "comandos/ComandoFim.h"
+#include "comandos/ComandoLposicao.h"
 
 int main() {
-    srand((unsigned int)time(NULL));
+    std::srand(static_cast<unsigned int>(std::time(nullptr)));
 
     Ecra ecra(Settings::ecra_max_linhas, Settings::ecra_max_colunas);
 
-    Fabrica fabrica(15, 20);
+    Simulador sim;
+    sim.defineFabrica(new Fabrica(15,20));
 
-    bool a_executar = true;
     std::string linha_input;
 
-    while (a_executar) {
+    while (sim.estaAExecutar()) {
+        Fabrica* fabrica = sim.getFabrica();
+
         ecra.limpa();
+        fabrica->desenha(ecra);
 
-        fabrica.desenha(ecra);
-
-        int col_painel = 2 + fabrica.getColunas() + 2 + 4;
+        int col_painel = 2 + fabrica->getColunas() + 2 + 4;
         ecra.desenhaMoldura(2, col_painel, 12, 32);
 
         ecra.escreveString(3, col_painel + 2, "Instante: 0");
@@ -40,37 +44,25 @@ int main() {
         }
 
         std::istringstream iss(linha_input);
-        std::string comando;
-        iss >> comando;
+        std::string nome;
+        iss >> nome;
 
-        if (comando.empty()) continue;
+        if (nome.empty()) continue;
 
-        if (comando == "fim") {
-            a_executar = false;
-            std::cout << "A encerrar o simulador de forma limpa...\n";
+        Comando* cmd = nullptr;
+        if (nome == "fim")
+            cmd = new ComandoFim();
+        else if (nome == "lposicao")
+            cmd = new ComandoLposicao();
+
+        if (cmd != nullptr) {
+            cmd->executa(sim, iss);
+            delete cmd;
+        } else {
+            std::cout << "Comando nao reconhecido nesta fase.\n";
         }
-        else if (comando == "lposicao") {
-            std::string pos, extra;
-            if (!(iss >> pos) || (iss >> extra) || pos.length() != 2) {
-                std::cout << "=> ERRO: Sintaxe correta: lposicao <linha><coluna> (ex: lposicao ac)\n";
-            } else {
-                int linha = pos[0] - 'a';
-                int coluna = pos[1] - 'a';
 
-                Terreno* t = fabrica.getTerreno(linha, coluna);
-                if (t != nullptr) {
-                    std::cout << "=> Terreno na posicao " << pos << ": " << t->getDescricao() << "\n";
-                } else {
-                    std::cout << "=> Posicao invalida ou fora dos limites da fabrica.\n";
-                }
-            }
-
-            std::cout << "(Pressione ENTER para continuar)";
-            std::string pausa;
-            std::getline(std::cin, pausa);
-        }
-        else {
-            std::cout << "=> Comando nao reconhecido nesta fase.\n";
+        if (sim.estaAExecutar()) {
             std::cout << "(Pressione ENTER para continuar)";
             std::string pausa;
             std::getline(std::cin, pausa);

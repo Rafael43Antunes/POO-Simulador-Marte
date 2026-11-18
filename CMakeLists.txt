@@ -9,6 +9,14 @@ add_executable(Projeto main.cpp
         terreno/Terreno.cpp
         terreno/Terreno.h
         simulador/Fabrica.cpp
-        simulador/Fabrica.h)
+        simulador/Fabrica.h
+        simulador/Simulador.cpp
+        simulador/Simulador.h
+        comandos/Comando.cpp
+        comandos/Comando.h
+        comandos/ComandoFim.cpp
+        comandos/ComandoFim.h
+        comandos/ComandoLposicao.cpp
+        comandos/ComandoLposicao.h)
 
 target_include_directories(Projeto PRIVATE ${CMAKE_SOURCE_DIR})
