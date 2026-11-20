@@ -4,8 +4,8 @@ project(Projeto)
 set(CMAKE_CXX_STANDARD 20)
 
 add_executable(Projeto main.cpp
-        Ecra/Ecra.cpp
-        Ecra/Ecra.h
+        ecra/Ecra.cpp
+        ecra/Ecra.h
         terreno/Terreno.cpp
         terreno/Terreno.h
         simulador/Fabrica.cpp
