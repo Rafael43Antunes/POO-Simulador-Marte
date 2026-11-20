@@ -36,12 +36,32 @@ void Simulador::mostraEcra() {
     int col_painel = 2 + fabrica->getColunas() + 2 + 4;
     ecra.desenhaMoldura(2, col_painel, 12, 32);
 
-    ecra.escreveString(3, col_painel + 2, "Instante: 0");
-    ecra.escreveString(4, col_painel + 2, "Creditos: " + std::to_string(Settings::fabrica_creditos_iniciais));
-    ecra.escreveString(5, col_painel + 2, "Maquinas: 0");
+    ecra.escreveString(3, col_painel + 2, "Instante: " + std::to_string(fabrica->getInstante()));
+    ecra.escreveString(4, col_painel + 2, "Creditos: " + std::to_string(fabrica->getCreditos()));
+    ecra.escreveString(5, col_painel + 2, "Maquinas: " + std::to_string(fabrica->getNumMaquinas()));
     ecra.escreveString(6, col_painel + 2, "Engenheiros: 0");
+
     ecra.escreveString(8, col_painel + 2, "No ultimo instante:");
-    ecra.escreveString(9, col_painel + 2, "(sem eventos)");
+
+    const std::vector<std::string>& eventos = fabrica->getEventos();
+    const std::size_t max_linhas_eventos = 4;
+
+    if (eventos.empty()) {
+        ecra.escreveString(9, col_painel + 2, "(sem eventos)");
+    }
+    else if (eventos.size() <= max_linhas_eventos) {
+        for (std::size_t i = 0; i < eventos.size(); ++i) {
+            ecra.escreveString(9 + static_cast<int>(i), col_painel + 2, eventos[i].substr(0, 28));
+        }
+    }
+    else {
+        // Nao cabem todos: mostra os 3 primeiros e quantos ficaram por mostrar
+        for (std::size_t i = 0; i < max_linhas_eventos - 1; ++i) {
+            ecra.escreveString(9 + static_cast<int>(i), col_painel + 2, eventos[i].substr(0, 28));
+        }
+        ecra.escreveString(9 + static_cast<int>(max_linhas_eventos) - 1, col_painel + 2,
+                           "(+" + std::to_string(eventos.size() - (max_linhas_eventos - 1)) + " eventos)");
+    }
 
     ecra.mostra();
 }

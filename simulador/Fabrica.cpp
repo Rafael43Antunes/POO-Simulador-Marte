@@ -1,6 +1,7 @@
 #include <cstdlib>
 #include <fstream>
 #include "simulador/Fabrica.h"
+#include "maquinas/Maquina.h"
 #include "Settings.h"
 
 namespace {
@@ -16,8 +17,15 @@ Fabrica::Fabrica(int num_linhas, int num_colunas)
               limita(num_colunas, Settings::fabrica_max_colunas), true) {}
 
 Fabrica::Fabrica(int num_linhas, int num_colunas, bool aleatoria)
-    : linhas(num_linhas), colunas(num_colunas), mapa(new Terreno*[num_linhas * num_colunas]) {
+    : linhas(num_linhas), colunas(num_colunas),
+      mapa(new Terreno*[num_linhas * num_colunas]),
+      maquinas(new Maquina*[num_linhas * num_colunas]),
+      creditos(Settings::fabrica_creditos_iniciais), instante(0), num_maquinas(0) {
     inicializaSolo();
+
+    for (int i = 0; i < num_linhas * num_colunas; ++i) {
+        maquinas[i] = nullptr;
+    }
 
     if (aleatoria) {
         espalhaCrateras(Settings::fabrica_num_crateras);
@@ -30,8 +38,10 @@ Fabrica::Fabrica(int num_linhas, int num_colunas, bool aleatoria)
 Fabrica::~Fabrica() {
     int total_posicoes = linhas * colunas;
     for (int i = 0; i < total_posicoes; ++i) {
+        delete maquinas[i];
         delete mapa[i];
     }
+    delete[] maquinas;
     delete[] mapa;
 }
 
@@ -46,6 +56,29 @@ int Fabrica::getLinhas() const {
 
 int Fabrica::getColunas() const {
     return colunas;
+}
+
+int Fabrica::getCreditos() const {
+    return creditos;
+}
+
+int Fabrica::getInstante() const {
+    return instante;
+}
+
+int Fabrica::getNumMaquinas() const {
+    return num_maquinas;
+}
+
+void Fabrica::alteraCreditos(int variacao) {
+    creditos += variacao;
+}
+
+std::string Fabrica::posicaoParaTexto(int l, int c) {
+    std::string texto;
+    texto += static_cast<char>('a' + l);
+    texto += static_cast<char>('a' + c);
+    return texto;
 }
 
 void Fabrica::inicializaSolo() {
@@ -98,8 +131,6 @@ void Fabrica::espalhaDepositos(int num_depositos, char tipo) {
     }
 }
 
-// Troca o terreno da posicao pelo que corresponde ao simbolo (o mesmo do ficheiro de mapa).
-// Devolve false se o simbolo nao existir.
 bool Fabrica::defineTerreno(int l, int c, char simbolo) {
     Terreno* novo = nullptr;
 
@@ -165,6 +196,61 @@ Terreno* Fabrica::getTerreno(int l, int c) const {
     return mapa[(l * colunas) + c];
 }
 
+Maquina* Fabrica::getMaquina(int l, int c) const {
+    if (l < 0 || l >= linhas || c < 0 || c >= colunas) {
+        return nullptr;
+    }
+    return maquinas[(l * colunas) + c];
+}
+
+bool Fabrica::colocaMaquina(Maquina* maquina) {
+    int l = maquina->getLinha();
+    int c = maquina->getColuna();
+
+    Terreno* terreno = getTerreno(l, c);
+    if (terreno == nullptr || !terreno->aceitaMaquinas() || getMaquina(l, c) != nullptr) {
+        return false;
+    }
+
+    maquinas[(l * colunas) + c] = maquina;
+    num_maquinas++;
+    return true;
+}
+
+bool Fabrica::removeMaquina(int l, int c) {
+    if (getMaquina(l, c) == nullptr) {
+        return false;
+    }
+
+    int indice = (l * colunas) + c;
+    delete maquinas[indice];
+    maquinas[indice] = nullptr;
+    num_maquinas--;
+    return true;
+}
+
+void Fabrica::avancaInstante() {
+    eventos.clear();
+    instante++;
+
+    for (int l = 0; l < linhas; ++l) {
+        for (int c = 0; c < colunas; ++c) {
+            Maquina* m = maquinas[(l * colunas) + c];
+            if (m != nullptr) {
+                m->atua(*this);
+            }
+        }
+    }
+}
+
+void Fabrica::regista(const std::string& evento) {
+    eventos.push_back(evento);
+}
+
+const std::vector<std::string>& Fabrica::getEventos() const {
+    return eventos;
+}
+
 void Fabrica::desenha(Ecra& ecra) const {
     int offset_linha = 2;
     int offset_coluna = 2;
@@ -182,7 +268,12 @@ void Fabrica::desenha(Ecra& ecra) const {
 
         ecra.posicionaCursor(offset_linha + 1 + l, offset_coluna + 1);
         for (int c = 0; c < colunas; ++c) {
-            ecra.escreveCaracter(mapa[(l * colunas) + c]->getCaracterVisual());
+            Maquina* m = maquinas[(l * colunas) + c];
+            if (m != nullptr) {
+                ecra.escreveCaracter(m->getCaracterVisual());
+            } else {
+                ecra.escreveCaracter(mapa[(l * colunas) + c]->getCaracterVisual());
+            }
         }
     }
 }

@@ -23,6 +23,38 @@ add_executable(Projeto main.cpp
         comandos/ComandoFabrica.cpp
         comandos/ComandoFabrica.h
         comandos/ComandoCarrega.cpp
-        comandos/ComandoCarrega.h)
+        comandos/ComandoCarrega.h
+        itens/Item.cpp
+        itens/Item.h
+        maquinas/Direcao.cpp
+        maquinas/Direcao.h
+        maquinas/Maquina.cpp
+        maquinas/Maquina.h
+        maquinas/Perfuradora.cpp
+        maquinas/Perfuradora.h
+        maquinas/Transportador.cpp
+        maquinas/Transportador.h
+        maquinas/Refinaria.cpp
+        maquinas/Refinaria.h
+        maquinas/Oficina.cpp
+        maquinas/Oficina.h
+        maquinas/Lancador.cpp
+        maquinas/Lancador.h
+        maquinas/Silo.cpp
+        maquinas/Silo.h
+        comandos/ComandoAvanca.cpp
+        comandos/ComandoAvanca.h
+        comandos/ComandoCompra.cpp
+        comandos/ComandoCompra.h
+        comandos/ComandoVende.cpp
+        comandos/ComandoVende.h
+        comandos/ComandoRoda.cpp
+        comandos/ComandoRoda.h
+        comandos/ComandoEstado.cpp
+        comandos/ComandoEstado.h
+        comandos/ComandoAjuda.cpp
+        comandos/ComandoAjuda.h
+        comandos/ComandoExecuta.cpp
+        comandos/ComandoExecuta.h)
 
 target_include_directories(Projeto PRIVATE ${CMAKE_SOURCE_DIR})
